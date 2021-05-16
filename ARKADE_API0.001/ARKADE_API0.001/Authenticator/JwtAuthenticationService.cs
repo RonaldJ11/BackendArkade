@@ -24,12 +24,6 @@ namespace ARKADE_API0._001.Authenticator
         public string Authenticate(string nickName, string password)
         {
 
-            //Valida información
-            if (string.IsNullOrEmpty(nickName) || string.IsNullOrEmpty(password) || nickName != "admin" || password != "admin")
-            {
-                return null;
-            }
-
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.ASCII.GetBytes(_key);
             var tokenDescriptor = new SecurityTokenDescriptor

@@ -1,15 +1,18 @@
 ﻿using ARKADE_API0._001.Authenticator;
+using ARKADE_API0._001.Data;
 using ARKADE_API0._001.Models;
+using ArkadeBackendApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ARKADE_API0._001.Controllers
+namespace ArkadeBackendApi.Controllers
 {
 
     [Authorize]
@@ -18,14 +21,16 @@ namespace ARKADE_API0._001.Controllers
     public class DefaultController : Controller
     {
 
+        private readonly AplicationDBContext _context;
         private readonly ILogger<DefaultController> _logger;
         private readonly IJwtAuthenticationService _authService;
 
 
-        public DefaultController(ILogger<DefaultController> logger, IJwtAuthenticationService authService)
+        public DefaultController(ILogger<DefaultController> logger, IJwtAuthenticationService authService, AplicationDBContext context)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _authService = authService;
+            _context = context;
         }
 
 
@@ -45,15 +50,25 @@ namespace ARKADE_API0._001.Controllers
         [HttpPost("login")]
         public IActionResult Authenticate([FromBody] UserLogin user)
         {
-            var token = _authService.Authenticate(user.NickName, user.Password);
-
-            if (token == null)
+            var userDB = Autenticate(user.NickName, user.Password).Result;
+            if (userDB == null)
             {
                 return Unauthorized();
             }
+            var token = _authService.Authenticate(user.NickName, user.Password);
 
             return Ok(token);
         }
-      
-    }
+
+        public async Task<UserLogin> Autenticate(string nickName, string password)
+        {
+            var users = await _context.USERSLOGIN.FindAsync(nickName);
+
+            if (users == null || users.Password != password)
+            {
+                return null;
+            }
+            return users;
+        }
+    }   
 }

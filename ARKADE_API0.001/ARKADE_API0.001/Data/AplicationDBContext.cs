@@ -15,5 +15,8 @@ namespace ARKADE_API0._001.Data
         }
 
         public DbSet<ArkadeBackendApi.Models.Client> ClIENTS { get; set; }
+        public DbSet<UserLogin> USERSLOGIN { get; set; }
+        public DbSet<Models.UserInfo> USERSINFO { get; set; }
+
     }
 }

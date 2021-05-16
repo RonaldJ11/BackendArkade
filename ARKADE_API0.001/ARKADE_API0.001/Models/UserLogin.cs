@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ARKADE_API0._001.Models
+namespace ArkadeBackendApi.Models
 {
     public class UserLogin
     {
