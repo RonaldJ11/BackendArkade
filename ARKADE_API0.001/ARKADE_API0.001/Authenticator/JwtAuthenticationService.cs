@@ -18,11 +18,13 @@ namespace ARKADE_API0._001.Authenticator
         public JwtAuthenticationService(string key)
         {
            _key = key;
-        }        
+        }
 
         //Authentica los tokens
         public string Authenticate(string nickName, string password)
         {
+
+            
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.ASCII.GetBytes(_key);
@@ -35,8 +37,10 @@ namespace ARKADE_API0._001.Authenticator
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
             };
+          
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
+
 
             return tokenHandler.WriteToken(token);
 

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,6 +51,7 @@ namespace ArkadeBackendApi.Controllers
         [HttpPost("login")]
         public IActionResult Authenticate([FromBody] UserLogin user)
         {
+
             var userDB = Autenticate(user.NickName, user.Password).Result;
             if (userDB == null)
             {
@@ -57,7 +59,7 @@ namespace ArkadeBackendApi.Controllers
             }
             var token = _authService.Authenticate(user.NickName, user.Password);
 
-            return Ok(token);
+            return Ok(new { Token= token});
         }
 
         public async Task<UserLogin> Autenticate(string nickName, string password)

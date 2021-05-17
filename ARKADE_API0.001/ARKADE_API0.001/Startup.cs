@@ -57,6 +57,7 @@ namespace ARKADE_API0._001
                         ValidateIssuer = false
                     };
                 });
+
             services.AddAuthorization();
             services.AddDbContext<AplicationDBContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("AplicationDBContext")));
@@ -75,6 +76,11 @@ namespace ARKADE_API0._001
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
 
             app.UseAuthentication();
 
